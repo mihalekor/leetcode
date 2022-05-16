@@ -21,20 +21,23 @@ class Solution {
   string longestPalindrome(string s) {
     for (int i = 0; i < s.size(); ++i) {
       char symbol = s[i];
-      int endstr = s.find(symbol, i + 1);
+      if (s.size() - i <= maxSize) break;
 
-      if (endstr != string::npos) {
+      int endstr = s.rfind(symbol);
+      while (endstr != i) {
+        if (endstr - i + 1 <= maxSize) break;
         string subs = s.substr(i, endstr - i + 1);
-        if (isPoli(subs))
+        if (isPoli(subs)) {
           if (subs.size() > maxSize) {
             maxSize = subs.size();
             out = subs;
           }
-      } else
-        continue;
+          break;
+        } else
+          endstr = s.rfind(symbol, endstr - 1);
+      }
     }
-
-    if (out == "") return out = s[0];
+    if (out == "") out = s[0];
     return out;
   }
 };
@@ -42,7 +45,21 @@ class Solution {
 int main() {
   std::cout << "Hello World!\n" << std::endl;
   Solution S;
-  cout << S.longestPalindrome("babad") << endl;
+  cout
+      << S.longestPalindrome(
+             "bkuadixhrtfehvbjjzojfyhuqyckdeilnftnklylyssbjivhvnplrzwrgcnrciypv"
+             "acbhdnglflipnlpzgivjfieunhzeaytshrintdwhbvbkhbsqbjxwhqrlneiwkmccd"
+             "nfcvapmtqihzyyoiaoqgtxkpbqqdboaxmmsdjxvdrwbhdnemqmsikoksfvjjovrbg"
+             "dtfgmhgryvvpunzrsluqzibsvyubyhqevpnfnszzriljpmoevpqacbvdcsgfzmnkh"
+             "nshsvynxxncqyjxqazcttkvjnkuvykgdrquybvlpwzladpetocuphzkgfuutqcbnt"
+             "twjmkkwbmbidcyauopcxmsarodcqabirbawtlgsytlflsiolxjghjmqrymadpzaet"
+             "cchyvkaezeavjemubbquclhcjcmbwxphllhfnzfyewpyyiirgnohylfbtfddeohti"
+             "frqiiwpdtyqjyemqjlnpcwlsylxjuxtnmcrpdznbzschmnjxnldxpkbrikpfsfwhs"
+             "arrfjueubvnztlwmognapvxwelyvueheqxtncpxhzwplaxqqrbmfmmqhohucxinxi"
+             "dxzhndvstideuwrisjgpwkgvsdxmlnfgqzzksflmjzckkyutrwptfvcawfbvqxlzt"
+             "stpoitdepexxiqtsdtjmssqbdinalsqkjjqkgilbfxajninuclquszwbmstcdbywf"
+             "hhnierqsegafyfqzvmqockcowfqwbgfxvdxbqobditvowhtdeptljetgj")
+      << endl;
 
   return 0;
 }
