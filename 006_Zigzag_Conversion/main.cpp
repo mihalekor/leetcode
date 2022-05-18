@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iterator>
 #include <string>
 
 using namespace std;
@@ -20,7 +19,7 @@ s, numRows:       123456789, 4
 class Solution {
  public:
   string matrix,  //для преобразования входящей строки в матрицу
-      with_spaces, out2;
+      with_spaces, out2, out3;
   char* p;
   string convert(string s, int numRows) {
     for (int i = 0, counter = 0; i < s.size(); ++i, ++counter) {
@@ -35,8 +34,6 @@ class Solution {
         //заканчиваем короткий столбик с пробелами
       } else if (counter == numRows + numRows - 1) {
         with_spaces.push_back(' ');
-        //реверс для корректонго обращения к строке как к матрице
-        reverse(with_spaces.begin(), with_spaces.end());
         matrix.append(with_spaces);
         counter = -1;
         with_spaces.clear();
@@ -48,8 +45,8 @@ class Solution {
     }
     //Дописываем короткую часть, если строка закончилась на ней
     if (!with_spaces.empty()) {
-      for (int i = 0; i < numRows - with_spaces.size(); ++i) matrix.append(" ");
-      reverse(with_spaces.begin(), with_spaces.end());
+      for (int i = 0; i < numRows - with_spaces.size(); ++i)
+        with_spaces.append(" ");
       matrix.append(with_spaces);
     }
     //Дописываем пробелы до конца столбца матрицы, чтобы матрица была полной
@@ -75,10 +72,23 @@ class Solution {
 
       if (m == numRows) m = 0;
       //расчёт смещения по строке, чтобы обращаться как к матрице
-      int offset = k * numRows + m;
+      int offset;
+      if (k % 2 == 0)  //чётный столбик
+        offset = k * numRows + m;
+      else
+        offset = k * numRows + numRows - m - 1;
       out2.push_back(p[offset]);
     }
     out2.erase(std::remove(out2.begin(), out2.end(), ' '), out2.end());
+
+    //попытка самостоятельно удалить проблемы - не уменьшила скорость выполнения
+    /*for (int i = 0, k = 0; i < out2.size(); ++i, ++k) {
+      if (out2[i] == ' ')
+        --k;
+      else
+        out3.push_back(out2[i]);
+    }*/
+
     return out2;
   }
 };
@@ -86,7 +96,7 @@ class Solution {
 int main() {
   std::cout << "Hello World!\n" << std::endl;
   Solution S;
-  cout << S.convert("PAYPALISHIRING", 3) << std::endl;
+  cout << S.convert("ABCD", 3) << std::endl;
 
   return 0;
 }
