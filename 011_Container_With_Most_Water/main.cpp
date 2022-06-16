@@ -33,26 +33,19 @@ using namespace std;
 class Solution {
  public:
   int maxArea(vector<int>& height) {
-    int a, iMax;
-    long max = 0, maxSum = 0;
-    map<int, int> mp;
-
-    if (height.size() < 2 || height.size() > 10000) return 0;
-
-    for (int i = 0; i < height.size(); ++i) {
-      if (height[i] > max) max = height[i], iMax = i;
-
-      if (height[i] < 0 || height[i] > 10000) return 0;
+    if (height.size() < 2 || height.size() > 100000) return 0;
+    int area = 0;
+    int len = height.size();
+    for (int i = 0; i < len; i++) {
+      for (int j = i + 1; j < len; j++) {
+        if (height[i] < 0 || height[i] > 10000 || height[j] < 0 ||
+            height[j] > 10000)
+          return 0;
+        // Calculating the max area
+        area = max(area, min(height[j], height[i]) * (j - i));
+      }
     }
-
-    for (int i = 0; i < height.size(); ++i) {
-      int temp = height[i] * (iMax - i);
-
-      if (temp < 0) temp *= -1;
-
-      if (temp > maxSum) maxSum = temp;
-    }
-    return maxSum;
+    return area;
   }
 };
 
